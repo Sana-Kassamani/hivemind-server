@@ -14,8 +14,8 @@ export class User {
   @Prop({ required: true, select: false })
   password: string;
 
-  @Prop({ required: true })
-  userType: Enumerator;
+  //   @Prop({ required: true })
+  //   userType: Enumerator;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
