@@ -13,7 +13,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @Get()
-  getUsers() {}
+  getUsers() {
+    return this.usersService.getUsers();
+  }
 
   @Post()
   @UsePipes(new ValidationPipe())
