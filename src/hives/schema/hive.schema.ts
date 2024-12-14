@@ -8,17 +8,15 @@ export class Hive {
   @Prop({ unique: true, required: true })
   label: string;
 
-  @Prop({ required: true })
-  location: string;
-
   @Prop({ required: true, type: Number })
-  nbOfFrames: Number;
+  nbOfFrames: number;
 
   @Prop({ type: Boolean, default: false })
-  harvestStatus: Boolean;
+  harvestStatus: boolean;
 
   @Prop({ type: Date, required: false })
   lastHarvestDate: Date;
+  newHive: import('mongoose').Types.ObjectId;
 
   //   details:[]
   //   images:[]
