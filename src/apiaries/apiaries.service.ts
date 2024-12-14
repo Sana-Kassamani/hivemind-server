@@ -23,12 +23,14 @@ export class ApiariesService {
   }
 
   updateApiary(id: string, updateApiaryDto: UpdateApiaryDto) {
+    //if found return updated doc (new: true), else return null
     return this.apiaryModel.findByIdAndUpdate(id, updateApiaryDto, {
       new: true,
     });
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} apiary`;
-  // }
+  deleteApiary(id: string) {
+    //if found return deleted doc, else return null
+    return this.apiaryModel.findByIdAndDelete(id);
+  }
 }
