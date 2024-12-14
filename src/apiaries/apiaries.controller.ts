@@ -59,5 +59,11 @@ export class ApiariesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {}
+  async deleteApiary(@Param('id') id: string) {
+    const isValid = mongoose.Types.ObjectId.isValid(id);
+    if (!isValid) throw new HttpException('Invalid Id', 400);
+    const deleted = await this.apiariesService.deleteApiary(id);
+    if (!deleted) throw new HttpException('Apiary not found', 404);
+    return;
+  }
 }
