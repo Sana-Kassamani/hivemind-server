@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectId } from 'mongoose';
+import { Hive, HiveSchema } from '../../hives/schema/hive.schema';
 
 @Schema()
 export class Apiary {
@@ -11,8 +12,8 @@ export class Apiary {
   @Prop({ required: true })
   location: string;
 
-  //   @Prop({  })
-  //   hives:[]
+  @Prop({ required: false, type: [HiveSchema] })
+  hives?: [Hive];
 }
 
 export const ApiarySchema = SchemaFactory.createForClass(Apiary);
