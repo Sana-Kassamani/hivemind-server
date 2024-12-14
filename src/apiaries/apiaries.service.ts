@@ -22,9 +22,11 @@ export class ApiariesService {
     return this.apiaryModel.findById(id);
   }
 
-  // update(id: number, updateApiaryDto: UpdateApiaryDto) {
-  //   return `This action updates a #${id} apiary`;
-  // }
+  updateApiary(id: string, updateApiaryDto: UpdateApiaryDto) {
+    return this.apiaryModel.findByIdAndUpdate(id, updateApiaryDto, {
+      new: true,
+    });
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} apiary`;

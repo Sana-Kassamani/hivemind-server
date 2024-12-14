@@ -37,4 +37,7 @@ export class UsersController {
     console.log(createUserDto);
     return this.usersService.createUser(createUserDto);
   }
+
+  // @Patch(':id')
+  // updateUser(@Param('id') id: string) {}
 }
