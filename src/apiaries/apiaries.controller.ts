@@ -40,9 +40,24 @@ export class ApiariesController {
     return this.apiariesService.createApiary(createApiaryDto);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateApiaryDto: UpdateApiaryDto) {}
+  // update parts of apiray doc vs put that updates the entire data doc
+  @Patch(':id')
+  @UsePipes(new ValidationPipe())
+  async updateApiary(
+    @Param('id') id: string,
+    @Body() updateApiaryDto: UpdateApiaryDto,
+  ) {
+    //TODO write middleware for validation of id
+    const isValid = mongoose.Types.ObjectId.isValid(id);
+    if (!isValid) throw new HttpException('Invalid Id', 400);
+    const updated = await this.apiariesService.updateApiary(
+      id,
+      updateApiaryDto,
+    );
+    if (!updated) throw new HttpException('Apiary not found', 404);
+    return updated;
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {}
+  @Delete(':id')
+  remove(@Param('id') id: string) {}
 }
