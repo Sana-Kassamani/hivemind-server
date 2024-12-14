@@ -25,11 +25,10 @@ export class ApiariesController {
   }
 
   @Get(':id')
-  getApiaryById(@Param('id') id: string) {
+  async getApiaryById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Apiary not found', 404);
-    const apiary = this.apiariesService.getApiaryById(id);
-    if (!apiary) throw new HttpException('Apiary not found', 404);
+    const apiary = await this.apiariesService.getApiaryById(id);
     return apiary;
   }
 
