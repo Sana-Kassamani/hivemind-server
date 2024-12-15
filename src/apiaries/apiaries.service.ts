@@ -78,4 +78,12 @@ export class ApiariesService {
     await apiary.save();
     return apiary;
   }
+
+  async deleteHive(apiaryId: string, hiveId: string) {
+    const apiary = await this.getApiaryById(apiaryId);
+    const hives = apiary.hives.filter((h) => h._id.toString() != hiveId);
+    apiary.hives = hives;
+    await apiary.save();
+    return apiary;
+  }
 }
