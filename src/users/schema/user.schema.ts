@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { ObjectId } from 'mongoose';
 import { Apiary } from 'src/apiaries/schema/apiary.schema';
 
-@Schema()
+@Schema({ discriminatorKey: 'userType' })
 export class User {
   _id: ObjectId;
 
@@ -15,10 +15,11 @@ export class User {
   @Prop({ required: true, select: false })
   password: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Apiary' })
-  apiaries?: [Apiary];
-  //   @Prop({ required: true })
-  //   userType: Enumerator;
+  @Prop({
+    type: String,
+    required: true,
+  })
+  userType: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
