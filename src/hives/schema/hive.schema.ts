@@ -16,7 +16,7 @@ export class Hive {
 
   @Prop({ type: Date, required: false })
   lastHarvestDate: Date;
-  newHive: import('mongoose').Types.ObjectId;
+  // newHive: import('mongoose').Types.ObjectId;
 
   //   details:[]
   //   images:[]

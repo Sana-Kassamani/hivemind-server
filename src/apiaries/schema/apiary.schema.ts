@@ -13,7 +13,7 @@ export class Apiary {
   location: string;
 
   @Prop({ required: false, type: [HiveSchema] })
-  hives?: [Hive];
+  hives?: Hive[];
 }
 
 export const ApiarySchema = SchemaFactory.createForClass(Apiary);
