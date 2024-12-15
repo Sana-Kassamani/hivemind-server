@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Patch,
   Post,
@@ -32,5 +33,10 @@ export class HivesController {
     @Body() updateHiveDto: UpdateHiveDto,
   ) {
     return this.apiariesService.updateHive(apiaryId, hiveId, updateHiveDto);
+  }
+
+  @Delete(':id/:hiveId')
+  deleteHive(@Param('id') apiaryId: string, @Param('hiveId') hiveId: string) {
+    return this.apiariesService.deleteHive(apiaryId, hiveId);
   }
 }
