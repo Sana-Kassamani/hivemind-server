@@ -1,19 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ObjectId } from 'mongoose';
+import { ObjectId, Types } from 'mongoose';
 import { Hive, HiveSchema } from '../../hives/schema/hive.schema';
+import { Task, TaskSchema } from 'src/tasks/schema/task.schema';
 
 @Schema()
 export class Apiary {
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ type: String, unique: true, required: true })
   label: string;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   location: string;
 
-  @Prop({ required: false, type: [HiveSchema] })
-  hives?: Hive[];
+  @Prop({ type: [HiveSchema], default: [] })
+  hives: Hive[];
+
+  @Prop({ type: [TaskSchema], default: [] })
+  tasks: Task[];
 }
 
 export const ApiarySchema = SchemaFactory.createForClass(Apiary);
