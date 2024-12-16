@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from './user.schema';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose, { ObjectId, Types } from 'mongoose';
 import { Apiary } from 'src/apiaries/schema/apiary.schema';
 
 @Schema()
 export class Owner {
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   username: string;
 

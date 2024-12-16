@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { ObjectId } from 'mongoose';
-import { Apiary } from 'src/apiaries/schema/apiary.schema';
+import mongoose, { ObjectId, Types } from 'mongoose';
 
 @Schema({ discriminatorKey: 'userType' })
 export class User {
-  _id: ObjectId;
+  _id: Types.ObjectId;
 
   @Prop({ unique: true, required: true })
   username: string;
