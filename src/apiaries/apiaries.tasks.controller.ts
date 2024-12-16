@@ -6,12 +6,14 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiariesService } from './apiaries.service';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 
 @Controller('apiaries/tasks')
 export class TaskController {
@@ -33,5 +35,15 @@ export class TaskController {
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteTask(@Param('id') apiaryId: string, @Param('taskId') taskId: string) {
     return this.apiariesService.deleteTask(apiaryId, taskId);
+  }
+
+  @Patch(':id/:taskId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  completeTask(
+    @Param('id') apiaryId: string,
+    @Param('taskId') taskId: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ) {
+    return this.apiariesService.completeTask(apiaryId, taskId, updateTaskDto);
   }
 }
