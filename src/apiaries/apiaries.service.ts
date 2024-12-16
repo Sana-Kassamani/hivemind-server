@@ -10,6 +10,8 @@ import { UpdateHiveDto } from 'src/hives/dto/update-hive.dto';
 import { Hive } from 'src/hives/schema/hive.schema';
 import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 import { Task } from 'src/tasks/schema/task.schema';
+import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { TaskStatus } from 'src/utils/enums/taskStatus.enum';
 
 @Injectable()
 export class ApiariesService {
@@ -119,6 +121,19 @@ export class ApiariesService {
     const apiary = await this.getApiaryById(apiaryId);
     const tasks = apiary.tasks.filter((t) => t._id.toString() != taskId);
     apiary.tasks = tasks;
+    await apiary.save();
+    return apiary;
+  }
+
+  async completeTask(
+    apiaryId: string,
+    taskId: string,
+    updateTaskDto: UpdateTaskDto,
+  ) {
+    const apiary = await this.getApiaryById(apiaryId);
+    const task = apiary.tasks.find((t) => t._id.toString() === taskId);
+    task.status = TaskStatus.Done;
+    task.comment = updateTaskDto.comment ?? 'No comment';
     await apiary.save();
     return apiary;
   }
