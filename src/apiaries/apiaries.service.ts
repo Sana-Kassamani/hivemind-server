@@ -114,4 +114,12 @@ export class ApiariesService {
     await apiary.save();
     return apiary;
   }
+
+  async deleteTask(apiaryId: string, taskId: string) {
+    const apiary = await this.getApiaryById(apiaryId);
+    const tasks = apiary.tasks.filter((t) => t._id.toString() != taskId);
+    apiary.tasks = tasks;
+    await apiary.save();
+    return apiary;
+  }
 }
