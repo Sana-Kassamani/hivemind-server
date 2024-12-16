@@ -4,7 +4,8 @@ import { ApiariesController } from './apiaries.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Apiary, ApiarySchema } from './schema/apiary.schema';
 import { HivesService } from 'src/hives/hives.service';
-import { HivesController } from './apiariesHives.controller';
+import { HivesController } from './apiaries.hives.controller';
+import { TaskController } from './apiaries.tasks.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { HivesController } from './apiariesHives.controller';
       },
     ]),
   ],
-  controllers: [ApiariesController, HivesController],
+  controllers: [ApiariesController, HivesController, TaskController],
   providers: [ApiariesService, HivesService],
 })
 export class ApiariesModule {}
