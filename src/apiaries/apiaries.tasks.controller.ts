@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -26,5 +27,11 @@ export class TaskController {
   @UsePipes(new ValidationPipe())
   addTask(@Param('id') apiaryId: string, @Body() createTaskDto: CreateTaskDto) {
     return this.apiariesService.addTask(apiaryId, createTaskDto);
+  }
+
+  @Delete(':id/:taskId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteTask(@Param('id') apiaryId: string, @Param('taskId') taskId: string) {
+    return this.apiariesService.deleteTask(apiaryId, taskId);
   }
 }
