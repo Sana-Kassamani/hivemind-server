@@ -4,6 +4,10 @@ import { TaskStatus } from 'src/utils/enums/taskStatus.enum';
 
 @Schema()
 export class Task {
+  constructor({ title, content }) {
+    this.title = title;
+    this.content = content;
+  }
   _id: Types.ObjectId;
 
   @Prop({ type: String, required: true })
@@ -18,7 +22,7 @@ export class Task {
   @Prop({ type: String, required: false, default: '' })
   comment: string;
 
-  @Prop({ type: Date, required: true })
+  @Prop({ type: Date, required: true, default: Date.now })
   date: Date;
 }
 
