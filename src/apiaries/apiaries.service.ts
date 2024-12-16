@@ -102,6 +102,11 @@ export class ApiariesService {
   // apiaries tasks specific api
   // ---------------------------------
 
+  async getTasks(apiaryId: string) {
+    const apiary = await this.getApiaryById(apiaryId);
+    return apiary.tasks;
+  }
+
   async addTask(apiaryId: string, createTaskDto: CreateTaskDto) {
     const apiary = await this.getApiaryById(apiaryId);
     const newTask = new Task(createTaskDto);
