@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,6 +15,11 @@ import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
 @Controller('apiaries/tasks')
 export class TaskController {
   constructor(private apiariesService: ApiariesService) {}
+
+  @Get(':id')
+  getTasks(@Param('id') apiaryId: string) {
+    return this.apiariesService.getTasks(apiaryId);
+  }
 
   @Post(':id')
   @HttpCode(HttpStatus.CREATED)
