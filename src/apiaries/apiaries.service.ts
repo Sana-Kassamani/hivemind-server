@@ -8,6 +8,8 @@ import { CreateHiveDto } from 'src/hives/dto/create-hive.dto';
 import { HivesService } from 'src/hives/hives.service';
 import { UpdateHiveDto } from 'src/hives/dto/update-hive.dto';
 import { Hive } from 'src/hives/schema/hive.schema';
+import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
+import { Task } from 'src/tasks/schema/task.schema';
 
 @Injectable()
 export class ApiariesService {
@@ -15,6 +17,10 @@ export class ApiariesService {
     @InjectModel(Apiary.name) private apiaryModel: Model<Apiary>,
     private hivesService: HivesService,
   ) {}
+
+  // ---------------------------------
+  // Apiaries specific apis
+  // ---------------------------------
 
   getApiaries() {
     return this.apiaryModel.find();
@@ -42,6 +48,11 @@ export class ApiariesService {
     //if found return deleted doc, else return null
     return this.apiaryModel.findByIdAndDelete(id);
   }
+
+  // ---------------------------------
+  // apiaries hive specific api
+  // ---------------------------------
+
   private isUniqueHiveLabel(label: string, hives: Hive[]) {
     const labelExists = hives.some((hive) => hive.label === label);
     if (labelExists) {
@@ -83,6 +94,18 @@ export class ApiariesService {
     const apiary = await this.getApiaryById(apiaryId);
     const hives = apiary.hives.filter((h) => h._id.toString() != hiveId);
     apiary.hives = hives;
+    await apiary.save();
+    return apiary;
+  }
+
+  // ---------------------------------
+  // apiaries tasks specific api
+  // ---------------------------------
+
+  async addTask(apiaryId: string, createTaskDto: CreateTaskDto) {
+    const apiary = await this.getApiaryById(apiaryId);
+    const newTask = new Task(createTaskDto);
+    apiary.tasks.push(newTask);
     await apiary.save();
     return apiary;
   }
