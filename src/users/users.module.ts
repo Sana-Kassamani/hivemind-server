@@ -16,6 +16,12 @@ import { Beekeeper, BeekeeperSchema } from './schema/beekeeper.schema';
   imports: [
     MongooseModule.forFeature([
       {
+        name: UserType.name,
+        schema: UserTypesSchema,
+      },
+    ]),
+    MongooseModule.forFeatureAsync([
+      {
         name: User.name,
         useFactory: () => {
           const schema = UserSchema;
