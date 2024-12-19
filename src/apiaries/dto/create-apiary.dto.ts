@@ -9,3 +9,11 @@ export class CreateApiaryDto {
   @IsString()
   location: string;
 }
+
+// type Shape = {
+//   area: number;
+// };
+
+// type Circle = Shape & {
+//   radius: number;
+// };
