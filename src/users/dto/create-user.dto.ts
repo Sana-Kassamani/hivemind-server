@@ -1,9 +1,11 @@
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
+import { ObjectId } from 'mongoose';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -17,4 +19,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsStrongPassword()
   password: string;
+
+  @IsOptional()
+  @IsString()
+  userType?: string | ObjectId;
 }
