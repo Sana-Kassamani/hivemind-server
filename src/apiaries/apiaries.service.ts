@@ -15,10 +15,7 @@ import { TaskStatus } from 'src/utils/enums/taskStatus.enum';
 
 @Injectable()
 export class ApiariesService {
-  constructor(
-    @InjectModel(Apiary.name) private apiaryModel: Model<Apiary>,
-    private hivesService: HivesService,
-  ) {}
+  constructor(@InjectModel(Apiary.name) private apiaryModel: Model<Apiary>) {}
 
   // ---------------------------------
   // Apiaries specific apis
@@ -66,13 +63,13 @@ export class ApiariesService {
     return true;
   }
   async addHive(apiaryId: string, createHiveDto: CreateHiveDto) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const newHive = this.hivesService.createHive(createHiveDto);
-    if (this.isUniqueHiveLabel(newHive.label, apiary.hives)) {
-      apiary.hives.push(newHive);
-      await apiary.save();
-      return apiary;
-    }
+    // const apiary = await this.getApiaryById(apiaryId);
+    // const newHive = this.hivesService.createHive(createHiveDto);
+    // if (this.isUniqueHiveLabel(newHive.label, apiary.hives)) {
+    //   apiary.hives.push(newHive);
+    //   await apiary.save();
+    //   return apiary;
+    // }
   }
 
   //ToDo apply pipe for  valid label
