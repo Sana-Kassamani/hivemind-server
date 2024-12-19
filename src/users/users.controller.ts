@@ -23,19 +23,20 @@ export class UsersController {
 
   //users/:id
   @Get(':id')
-  getUserById(@Param('id') id: string) {
+  async getUserById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('User not found', 404);
-    const user = this.usersService.getUserById(id);
+    const user = await this.usersService.getUserById(id);
     if (!user) throw new HttpException('User not found', 404);
+    console.log(user.userType);
     return user;
   }
 
   @Post()
   @UsePipes(new ValidationPipe())
-  createUser(@Body() createUserDto: CreateUserDto) {
+  async createUser(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
-    return this.usersService.createUser(createUserDto);
+    return await this.usersService.createUser(createUserDto);
   }
 
   // @Patch(':id')
