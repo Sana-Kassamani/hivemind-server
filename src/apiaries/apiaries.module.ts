@@ -17,6 +17,7 @@ import { TaskController } from './apiaries.tasks.controller';
     ]),
   ],
   controllers: [ApiariesController, HivesController, TaskController],
-  providers: [ApiariesService, HivesService],
+  providers: [ApiariesService],
+  exports: [ApiariesService],
 })
 export class ApiariesModule {}
