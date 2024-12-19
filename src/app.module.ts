@@ -3,6 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { ApiariesModule } from './apiaries/apiaries.module';
+import { UserTypesModule } from './user-types/user-types.module';
+import { TasksModule } from './tasks/tasks.module';
+import { HivesModule } from './hives/hives.module';
+import { HiveDetailsModule } from './hive-details/hive-details.module';
 
 @Module({
   imports: [
@@ -10,6 +14,10 @@ import { ApiariesModule } from './apiaries/apiaries.module';
     MongooseModule.forRoot(process.env.DATABASE_CONNECT),
     UsersModule,
     ApiariesModule,
+    UserTypesModule,
+    TasksModule,
+    HivesModule,
+    HiveDetailsModule,
   ],
   controllers: [],
   providers: [],
