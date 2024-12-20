@@ -7,6 +7,7 @@ import { UserTypesModule } from './user-types/user-types.module';
 import { TasksModule } from './tasks/tasks.module';
 import { HivesModule } from './hives/hives.module';
 import { HiveDetailsModule } from './hive-details/hive-details.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { HiveDetailsModule } from './hive-details/hive-details.module';
     TasksModule,
     HivesModule,
     HiveDetailsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

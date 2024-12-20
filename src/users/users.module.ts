@@ -35,5 +35,6 @@ import { Beekeeper, BeekeeperSchema } from './schema/beekeeper.schema';
   ],
   providers: [UsersService],
   controllers: [UsersController],
+  exports: [UsersService],
 })
 export class UsersModule {}
