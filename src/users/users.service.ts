@@ -34,7 +34,6 @@ export class UsersService {
     const user = await this.userModel
       .findOne({ username: username })
       .select('+password');
-    if (!user) throw new NotFoundException('Invalid Credentials');
     return user;
   }
 }
