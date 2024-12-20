@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
 import { Model } from 'mongoose';
@@ -31,6 +31,10 @@ export class UsersService {
   }
 
   async getUserByUsername(username: string) {
-    const user = await this.userModel.find({ username });
+    const user = await this.userModel
+      .findOne({ username: username })
+      .select('+password');
+    if (!user) throw new NotFoundException('Invalid Credentials');
+    return user;
   }
 }
