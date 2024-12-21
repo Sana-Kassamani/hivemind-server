@@ -49,55 +49,6 @@ export class ApiariesService {
   }
 
   // ---------------------------------
-  // apiaries hive specific api
-  // ---------------------------------
-
-  private isUniqueHiveLabel(label: string, hives: Hive[]) {
-    const labelExists = hives.some((hive) => hive.label === label);
-    if (labelExists) {
-      throw new ConflictException(
-        'Hive label must be unique within this Apiary',
-      );
-    }
-    console.log(label, ' is unique');
-    return true;
-  }
-  async addHive(apiaryId: string, createHiveDto: CreateHiveDto) {
-    // const apiary = await this.getApiaryById(apiaryId);
-    // const newHive = this.hivesService.createHive(createHiveDto);
-    // if (this.isUniqueHiveLabel(newHive.label, apiary.hives)) {
-    //   apiary.hives.push(newHive);
-    //   await apiary.save();
-    //   return apiary;
-    // }
-  }
-
-  //ToDo apply pipe for  valid label
-  async updateHive(
-    apiaryId: string,
-    hiveId: string,
-    { label, nbOfFrames }: UpdateHiveDto,
-  ) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const hive = apiary.hives.find((h) => h._id.toString() === hiveId);
-    if (!hive) throw new HttpException('Hive in apiary not found', 404);
-    if (label && label != hive.label) {
-      this.isUniqueHiveLabel(label, apiary.hives) && (hive.label = label);
-    }
-    nbOfFrames && (hive.nbOfFrames = nbOfFrames);
-    await apiary.save();
-    return apiary;
-  }
-
-  async deleteHive(apiaryId: string, hiveId: string) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const hives = apiary.hives.filter((h) => h._id.toString() != hiveId);
-    apiary.hives = hives;
-    await apiary.save();
-    return apiary;
-  }
-
-  // ---------------------------------
   // apiaries tasks specific api
   // ---------------------------------
 
