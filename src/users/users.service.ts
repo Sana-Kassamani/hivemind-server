@@ -15,6 +15,13 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
+    const { username, email } = createUserDto;
+    const user = await this.getUserByUsername(username, email);
+    if (user) {
+      throw new BadRequestException(
+        `${user.username === username ? 'Username' : 'Email'} already exists`,
+      );
+    }
     !createUserDto.userType && (createUserDto.userType = UserType.BeeKeeper);
     const newUser = new this.userModel(createUserDto);
     return newUser.save();
