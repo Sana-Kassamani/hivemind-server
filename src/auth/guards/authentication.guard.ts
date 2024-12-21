@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+export type ReqUser = {
+  userId: string;
+  role: string;
+};
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
@@ -18,7 +22,11 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      request.user = { userId: payload.sub };
+      const reqUser: ReqUser = {
+        userId: payload.sub,
+        role: payload.role,
+      };
+      request.user = reqUser;
       return true;
     } catch (error) {
       throw new UnauthorizedException();
