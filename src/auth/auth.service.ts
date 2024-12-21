@@ -29,6 +29,7 @@ export class AuthService {
   async signToken(user: ModifiedUser | User) {
     const payload = {
       sub: user._id,
+      role: user.userType,
     };
     const token = await this.jwtService.signAsync(payload);
     return token;
@@ -44,5 +45,9 @@ export class AuthService {
     const user = await this.usersService.createUser(createUserDto);
     const token = await this.signToken(user);
     return { user, token };
+  }
+
+  async logout() {
+    //TODO blacklist jwt/ refresh & access toekn method
   }
 }
