@@ -12,8 +12,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiariesService } from './apiaries.service';
-import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
-import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { CreateTaskDto } from 'src/core/tasks/dto/create-task.dto';
+import { UpdateTaskDto } from 'src/core/tasks/dto/update-task.dto';
 
 @Controller('apiaries/tasks')
 export class TaskController {

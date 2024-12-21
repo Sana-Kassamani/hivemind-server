@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectId, Types } from 'mongoose';
 import { Hive, HiveSchema } from '../../hives/schema/hive.schema';
-import { Task, TaskSchema } from 'src/tasks/schema/task.schema';
+import { Task, TaskSchema } from 'src/core/tasks/schema/task.schema';
 
 @Schema()
 export class Apiary {

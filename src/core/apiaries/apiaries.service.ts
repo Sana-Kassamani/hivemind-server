@@ -4,13 +4,13 @@ import { UpdateApiaryDto } from './dto/update-apiary.dto';
 import { Apiary } from './schema/apiary.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateHiveDto } from 'src/hives/dto/create-hive.dto';
-import { HivesService } from 'src/hives/hives.service';
-import { UpdateHiveDto } from 'src/hives/dto/update-hive.dto';
-import { Hive } from 'src/hives/schema/hive.schema';
-import { CreateTaskDto } from 'src/tasks/dto/create-task.dto';
-import { Task } from 'src/tasks/schema/task.schema';
-import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { CreateHiveDto } from 'src/core/hives/dto/create-hive.dto';
+import { HivesService } from 'src/core/hives/hives.service';
+import { UpdateHiveDto } from 'src/core/hives/dto/update-hive.dto';
+import { Hive } from 'src/core/hives/schema/hive.schema';
+import { CreateTaskDto } from 'src/core/tasks/dto/create-task.dto';
+import { Task } from 'src/core/tasks/schema/task.schema';
+import { UpdateTaskDto } from 'src/core/tasks/dto/update-task.dto';
 import { TaskStatus } from 'src/utils/enums/taskStatus.enum';
 
 @Injectable()

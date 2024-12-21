@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
-import { ApiariesModule } from './apiaries/apiaries.module';
-import { TasksModule } from './tasks/tasks.module';
-import { HivesModule } from './hives/hives.module';
-import { HiveDetailsModule } from './hive-details/hive-details.module';
+import { UsersModule } from './core/users/users.module';
+import { ApiariesModule } from './core/apiaries/apiaries.module';
+import { TasksModule } from './core/tasks/tasks.module';
+import { HivesModule } from './core/hives/hives.module';
+import { HiveDetailsModule } from './core/hive-details/hive-details.module';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 

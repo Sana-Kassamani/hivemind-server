@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/core/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/schema/user.schema';
+import { User } from 'src/core/users/schema/user.schema';
 import { compare } from 'bcrypt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from 'src/core/users/dto/create-user.dto';
 
 type ModifiedUser = Omit<User, 'password'>;
 @Injectable()

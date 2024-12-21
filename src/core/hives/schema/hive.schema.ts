@@ -3,11 +3,11 @@ import { ObjectId, Types } from 'mongoose';
 import {
   HiveDetails,
   HiveDetailsSchema,
-} from 'src/hive-details/schema/hive-details.schema';
+} from 'src/core/hive-details/schema/hive-details.schema';
 import {
   HiveMedia,
   HiveMediaSchema,
-} from 'src/hive-media/schema/hive-media.schema';
+} from 'src/core/hive-media/schema/hive-media.schema';
 
 @Schema()
 export class Hive {

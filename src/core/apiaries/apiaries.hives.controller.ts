@@ -9,9 +9,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiariesService } from './apiaries.service';
-import { CreateHiveDto } from 'src/hives/dto/create-hive.dto';
-import { HivesService } from 'src/hives/hives.service';
-import { UpdateHiveDto } from 'src/hives/dto/update-hive.dto';
+import { CreateHiveDto } from 'src/core/hives/dto/create-hive.dto';
+import { HivesService } from 'src/core/hives/hives.service';
+import { UpdateHiveDto } from 'src/core/hives/dto/update-hive.dto';
 
 @Controller('apiaries/hives')
 export class HivesController {

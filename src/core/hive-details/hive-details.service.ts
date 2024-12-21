@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { Apiary } from 'src/apiaries/schema/apiary.schema';
-import { HivesService } from 'src/hives/hives.service';
+import { Apiary } from 'src/core/apiaries/schema/apiary.schema';
+import { HivesService } from 'src/core/hives/hives.service';
 import { HiveDetails } from './schema/hive-details.schema';
 import { HiveDetailsController } from './hive-details.controller';
 
