@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { FlatESLint } from 'eslint/use-at-your-own-risk';
 import { ObjectId, Types } from 'mongoose';
 import {
   HiveDetails,
