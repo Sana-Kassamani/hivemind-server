@@ -15,7 +15,9 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto) {
-    const user = await this.usersService.getUserByUsername(loginDto.username);
+    const user = await this.usersService.getUserByUsernameOEmail(
+      loginDto.username,
+    );
     const check = await compare(loginDto.password, user?.password ?? '');
     if (!user || !check) throw new UnauthorizedException('Invalid Credentials');
     const modifiedUser: ModifiedUser = (({ password, ...rest }) => rest)(
