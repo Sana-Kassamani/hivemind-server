@@ -3,7 +3,7 @@ import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/schema/user.schema';
-import { mongo } from 'mongoose';
+import { compare } from 'bcrypt';
 
 type ModifiedUser = Omit<User, 'password'>;
 @Injectable()
@@ -15,14 +15,14 @@ export class AuthService {
 
   async validateUser(loginDto: LoginDto) {
     const user = await this.usersService.getUserByUsername(loginDto.username);
-    //TODO compare bcrypt
-    if (user?.password !== loginDto.password)
-      throw new UnauthorizedException('Invalid Credentials');
+    const check = await compare(loginDto.password, user?.password ?? '');
+    if (!user || !check) throw new UnauthorizedException('Invalid Credentials');
     const modifiedUser: ModifiedUser = (({ password, ...rest }) => rest)(
       user.toObject(),
     );
     return modifiedUser;
   }
+
   async login(loginDto: LoginDto) {
     const user: ModifiedUser = await this.validateUser(loginDto);
     const payload = {
