@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Apiary } from '../apiaries/schema/apiary.schema';
 import { Model } from 'mongoose';
@@ -58,6 +62,28 @@ export class TasksService {
       },
     );
     if (!updatedApiary) throw new NotFoundException('Task in apiary not found');
+    return updatedApiary;
+  }
+
+  async deleteTask(apiaryId: string, taskId: string) {
+    // find apiary with id and delete task with id
+    const updatedApiary = await this.apiaryModel.findOneAndUpdate(
+      { _id: apiaryId, 'tasks._id': taskId },
+      {
+        $pull: {
+          tasks: {
+            _id: taskId,
+          },
+        },
+      },
+      {
+        new: true,
+        projection: { hives: 1 },
+      },
+    );
+    // if apiary doc or task not found
+    if (!updatedApiary)
+      throw new BadRequestException('Task in apiary not found');
     return updatedApiary;
   }
 }
