@@ -90,7 +90,8 @@ export class HivesService {
       },
     );
     // if apiary doc or hive not found
-    if (!updatedApiary) throw new BadRequestException('Hive not found');
+    if (!updatedApiary)
+      throw new BadRequestException('Hive in apiary not found');
     return updatedApiary;
   }
 
