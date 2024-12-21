@@ -25,7 +25,6 @@ export class HivesService {
         'Hive label must be unique within this Apiary',
       );
     }
-    console.log(label, ' is unique');
     return true;
   }
 
@@ -64,9 +63,50 @@ export class HivesService {
   }
 
   async getHiveById(apiaryId: string, hiveId: string) {
-    // const apiary = await this.apiariesService.getApiaryById(apiaryId);
-    // const hive = apiary.hives.find((h) => h._id.toString() === hiveId);
-    // if (!hive) throw new HttpException('Hive in apiary not found', 404);
-    // return hive;
+    const hive = this.apiaryModel.findOne({
+      _id: apiaryId,
+      'hives._id': hiveId,
+    });
+    if (!hive) throw new HttpException('Hive not found', 404);
+    return hive;
+  }
+
+  async deleteHive(apiaryId: string, hiveId: string) {
+    // find apiary with id and delete hive with id
+    const updatedApiary = await this.apiaryModel.findOneAndUpdate(
+      { _id: apiaryId, 'hives._id': hiveId },
+      {
+        $pull: {
+          hives: {
+            _id: hiveId,
+          },
+        },
+      },
+      {
+        new: true,
+        projection: { hives: 1 },
+      },
+    );
+    // if apiary doc or hive not found
+    if (!updatedApiary) throw new BadRequestException('Hive not found');
+    return updatedApiary;
+  }
+
+  // not used as endpoint
+  async updateHive(
+    apiaryId: string,
+    hiveId: string,
+    { label, nbOfFrames }: UpdateHiveDto,
+  ) {
+    const apiary = await this.apiaryModel.findById(apiaryId);
+    if (!apiary) throw new NotFoundException('Apiary not found');
+    const hive = apiary.hives.find((h) => h._id.toString() === hiveId);
+    if (!hive) throw new HttpException('Hive in apiary not found', 404);
+    if (label && label != hive.label) {
+      this.isUniqueHiveLabel(label, apiary.hives) && (hive.label = label);
+    }
+    nbOfFrames && (hive.nbOfFrames = nbOfFrames);
+    await apiary.save();
+    return apiary;
   }
 }
