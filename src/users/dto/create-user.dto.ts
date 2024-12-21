@@ -22,5 +22,5 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  userType?: string | ObjectId;
+  userType?: string;
 }
