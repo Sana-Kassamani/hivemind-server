@@ -62,13 +62,15 @@ export class HivesService {
     return updatedApiary;
   }
 
-  async getHiveById(apiaryId: string, hiveId: string) {
-    const hive = this.apiaryModel.findOne({
-      _id: apiaryId,
-      'hives._id': hiveId,
-    });
-    if (!hive) throw new HttpException('Hive not found', 404);
-    return hive;
+  // get hives of apiary with iot details
+  async getAllHives(apiaryId: string) {
+    const apiary = this.apiaryModel
+      .findOne({
+        _id: apiaryId,
+      })
+      .select('+hives.iotDetails');
+    if (!apiary) throw new HttpException('Apiary not found', 404);
+    return apiary;
   }
 
   async deleteHive(apiaryId: string, hiveId: string) {
