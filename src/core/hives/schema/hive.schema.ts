@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { FlatESLint } from 'eslint/use-at-your-own-risk';
 import { ObjectId, Types } from 'mongoose';
 import {
   HiveDetails,
@@ -25,13 +26,16 @@ export class Hive {
   @Prop({ type: Date, required: false })
   lastHarvestDate: Date;
 
-  @Prop({ type: [HiveDetailsSchema], default: [] })
+  @Prop({ type: [String], default: [] })
+  diseases: string[];
+
+  @Prop({ type: [HiveDetailsSchema], default: [], select: false })
   iotDetails: HiveDetails[];
 
-  @Prop({ type: [HiveMediaSchema], default: [] })
+  @Prop({ type: [HiveMediaSchema], default: [], select: false })
   images: HiveMedia[];
 
-  @Prop({ type: [HiveMediaSchema], default: [] })
+  @Prop({ type: [HiveMediaSchema], default: [], select: false })
   audios: HiveMedia[];
 }
 
