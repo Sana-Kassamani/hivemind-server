@@ -33,6 +33,11 @@ export class UsersController {
     return user;
   }
 
+  @Get('beekeepers/noApiary')
+  async getBeekeepersWithNoApiary() {
+    return this.usersService.getBeekeepersWithNoApiary();
+  }
+
   @Post()
   @UsePipes(new ValidationPipe())
   async createUser(@Body() createUserDto: CreateUserDto) {
