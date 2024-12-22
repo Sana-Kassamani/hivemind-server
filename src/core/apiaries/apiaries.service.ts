@@ -35,22 +35,49 @@ export class ApiariesService {
 
   // add an apiary by owner
   async createApiary(user: ReqUser, createApiaryDto: CreateApiaryDto) {
-    const newApiary = new this.apiaryModel(createApiaryDto);
-    await newApiary.save();
-    const owner = await this.userModel.discriminators.Owner.findByIdAndUpdate(
-      {
-        _id: user.userId,
-      },
-      {
-        $push: { apiaries: new mongoose.Types.ObjectId(newApiary._id) },
-      },
-      {
-        new: true,
-      },
-    );
-    console.log(owner);
-    if (!owner) throw new NotFoundException('Owner not found');
-    return newApiary;
+    try {
+      const newApiary = new this.apiaryModel(createApiaryDto);
+      await newApiary.save();
+      const owner = await this.userModel.discriminators.Owner.findByIdAndUpdate(
+        {
+          _id: user.userId,
+        },
+        {
+          $push: { apiaries: new mongoose.Types.ObjectId(newApiary._id) },
+        },
+        {
+          new: true,
+        },
+      );
+      const beekeeper =
+        await this.userModel.discriminators.Beekeeper.findByIdAndUpdate(
+          {
+            _id: createApiaryDto.beekeeperId,
+          },
+          {
+            assignedApiary: new mongoose.Types.ObjectId(
+              createApiaryDto.beekeeperId,
+            ),
+          },
+          {
+            new: true,
+          },
+        );
+      console.log(owner);
+      console.log(beekeeper);
+      if (!owner) throw new NotFoundException('Owner not found');
+      return newApiary;
+    } catch (err) {
+      if (err.code === 11000) {
+        //MongoDB error code 11000 for duplicate key
+        throw new HttpException(
+          `Apiary label: ${createApiaryDto.label} already exists.`,
+          400,
+        );
+      }
+
+      throw new HttpException(err.message, 400);
+    }
   }
 
   async getApiaryById(id: string) {
