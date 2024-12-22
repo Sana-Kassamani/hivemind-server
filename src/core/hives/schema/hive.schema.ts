@@ -13,7 +13,7 @@ import {
 export class Hive {
   _id: Types.ObjectId;
 
-  @Prop({ type: String, unique: true, required: true })
+  @Prop({ type: String, required: true })
   label: string;
 
   @Prop({ required: true, type: Number })

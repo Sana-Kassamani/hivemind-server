@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from './user.schema';
 import mongoose, { ObjectId, Types } from 'mongoose';
 import { Apiary } from 'src/core/apiaries/schema/apiary.schema';
 
