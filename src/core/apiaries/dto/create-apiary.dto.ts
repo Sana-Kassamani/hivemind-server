@@ -8,6 +8,10 @@ export class CreateApiaryDto {
   @IsNotEmpty()
   @IsString()
   location: string;
+
+  @IsNotEmpty()
+  @IsString()
+  beekeeperId: string;
 }
 
 // type Shape = {
