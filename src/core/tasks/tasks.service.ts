@@ -24,9 +24,44 @@ export class TasksService {
     );
     return apiary;
   }
+  async getCompletedTasks(apiaryId: string) {
+    const apiary = await this.apiaryModel.findOne(
+      {
+        _id: apiaryId,
+      },
+      {
+        tasks: {
+          $filter: {
+            input: '$tasks',
+            as: 'task',
+            cond: { $eq: ['$$task.status', TaskStatus.Done] },
+          },
+        },
+      },
+    );
+    return apiary;
+  }
 
+  async getPendingTasks(apiaryId: string) {
+    const apiary = await this.apiaryModel.findOne(
+      {
+        _id: apiaryId,
+      },
+      {
+        tasks: {
+          $filter: {
+            input: '$tasks',
+            as: 'task',
+            cond: { $eq: ['$$task.status', TaskStatus.Pending] },
+          },
+        },
+      },
+    );
+    return apiary;
+  }
   async addTask(apiaryId: string, createTaskDto: CreateTaskDto) {
     const newTask = new Task(createTaskDto);
+    // push new task to tasks array in apiary
     const updatedApiary = await this.apiaryModel.findOneAndUpdate(
       { _id: apiaryId },
       {
@@ -39,6 +74,7 @@ export class TasksService {
         projection: { tasks: 1 },
       },
     );
+    // task or apiary not found
     if (!updatedApiary) throw new NotFoundException('Apiary not found');
     return updatedApiary;
   }
@@ -48,6 +84,7 @@ export class TasksService {
     taskId: string,
     updateTaskDto: UpdateTaskDto,
   ) {
+    // access a task in an apiary
     const updatedApiary = await this.apiaryModel.findOneAndUpdate(
       { _id: apiaryId, 'tasks._id': taskId },
       {
@@ -58,9 +95,10 @@ export class TasksService {
       },
       {
         new: true,
-        projection: { tasks: 1 },
+        projection: { tasks: 1 }, //return task array only with apiary _id
       },
     );
+    // task or apiary not found
     if (!updatedApiary) throw new NotFoundException('Task in apiary not found');
     return updatedApiary;
   }
