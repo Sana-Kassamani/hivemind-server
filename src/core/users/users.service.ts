@@ -39,4 +39,11 @@ export class UsersService {
       .select('+password');
     return user;
   }
+
+  async getBeekeepersWithNoApiary() {
+    const beekeepers = await this.userModel.discriminators.Beekeeper.find({
+      assignedApiary: { $eq: null },
+    });
+    return beekeepers;
+  }
 }
