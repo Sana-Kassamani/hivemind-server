@@ -22,6 +22,7 @@ export class UsersController {
   }
 
   //users/:id
+  //not used for now
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
@@ -38,7 +39,4 @@ export class UsersController {
     console.log(createUserDto);
     return await this.usersService.createUser(createUserDto);
   }
-
-  // @Patch(':id')
-  // updateUser(@Param('id') id: string) {}
 }

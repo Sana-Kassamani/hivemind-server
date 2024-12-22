@@ -30,7 +30,6 @@ export class HivesService {
 
   async addHive(apiaryId: string, createHiveDto: CreateHiveDto) {
     // checks if apiary is found and hive with this label is not present, then updates
-    // else returns null
     const updatedApiary = await this.apiaryModel.findOneAndUpdate(
       { _id: apiaryId, 'hives.label': { $ne: createHiveDto.label } },
       {
@@ -47,6 +46,7 @@ export class HivesService {
       },
     );
 
+    // else returns null
     // good for debugging
     if (!updatedApiary) {
       // if it was not updated
@@ -90,8 +90,7 @@ export class HivesService {
       },
     );
     // if apiary doc or hive not found
-    if (!updatedApiary)
-      throw new BadRequestException('Hive in apiary not found');
+    if (!updatedApiary) throw new BadRequestException('Hive in not found');
     return updatedApiary;
   }
 
