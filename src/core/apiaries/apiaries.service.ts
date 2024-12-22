@@ -108,7 +108,22 @@ export class ApiariesService {
         new: true,
       },
     );
+    const beekeeper =
+      await this.userModel.discriminators.Beekeeper.findOneAndUpdate(
+        {
+          assignedApiary: deleted._id,
+        },
+        {
+          $set: {
+            '$.assignedApiary': null,
+          },
+        },
+        {
+          new: true,
+        },
+      );
     console.log(owner);
+    console.log(beekeeper);
     return deleted;
   }
 }
