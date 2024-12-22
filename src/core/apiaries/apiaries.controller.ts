@@ -31,9 +31,12 @@ export class ApiariesController {
   getApiaries() {
     return this.apiariesService.getApiaries();
   }
+
+  @Role(UserType.Owner)
+  @UseGuards(RoleGuard)
   @Get('owner')
-  getOwnerApiaries(@Request() req: ReqUser) {
-    return this.apiariesService.getOwnerApiaries(req);
+  getOwnerApiaries(@Request() req) {
+    return this.apiariesService.getOwnerApiaries(req.user);
   }
 
   @Get(':id')
@@ -44,13 +47,13 @@ export class ApiariesController {
     return apiary;
   }
 
-  @Post()
   @Role(UserType.Owner)
   @UseGuards(RoleGuard)
+  @Post()
   @UsePipes(new ValidationPipe())
-  createApiary(@Body() createApiaryDto: CreateApiaryDto) {
+  createApiary(@Request() req, @Body() createApiaryDto: CreateApiaryDto) {
     console.log(createApiaryDto);
-    return this.apiariesService.createApiary(createApiaryDto);
+    return this.apiariesService.createApiary(req.user, createApiaryDto);
   }
 
   // update parts of apiray doc vs put that updates the entire data doc
