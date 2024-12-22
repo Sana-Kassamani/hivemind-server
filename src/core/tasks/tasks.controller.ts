@@ -24,6 +24,15 @@ export class TasksController {
     return this.tasksService.getTasks(apiaryId);
   }
 
+  @Get('completed/:id')
+  getCompletedTasks(@Param('id') apiaryId: string) {
+    return this.tasksService.getCompletedTasks(apiaryId);
+  }
+  @Get('pending/:id')
+  getPendingTasks(@Param('id') apiaryId: string) {
+    return this.tasksService.getPendingTasks(apiaryId);
+  }
+
   @Post(':id')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new ValidationPipe())
