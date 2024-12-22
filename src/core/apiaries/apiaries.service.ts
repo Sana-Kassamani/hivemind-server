@@ -1,30 +1,58 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateApiaryDto } from './dto/create-apiary.dto';
 import { UpdateApiaryDto } from './dto/update-apiary.dto';
 import { Apiary } from './schema/apiary.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateHiveDto } from 'src/core/hives/dto/create-hive.dto';
-import { HivesService } from 'src/core/hives/hives.service';
-import { UpdateHiveDto } from 'src/core/hives/dto/update-hive.dto';
-import { Hive } from 'src/core/hives/schema/hive.schema';
-import { CreateTaskDto } from 'src/core/tasks/dto/create-task.dto';
-import { Task } from 'src/core/tasks/schema/task.schema';
-import { UpdateTaskDto } from 'src/core/tasks/dto/update-task.dto';
-import { TaskStatus } from 'src/utils/enums/taskStatus.enum';
+import mongoose, { Model } from 'mongoose';
+import { Role } from 'src/auth/decorators/role.decorator';
+import { UserType } from 'src/utils/enums/userType.enum';
+import { RoleGuard } from 'src/auth/guards/authorization.guard';
+import { ReqUser } from 'src/auth/guards/authentication.guard';
+import { User } from '../users/schema/user.schema';
 
 @Injectable()
 export class ApiariesService {
-  constructor(@InjectModel(Apiary.name) private apiaryModel: Model<Apiary>) {}
+  constructor(
+    @InjectModel(Apiary.name) private apiaryModel: Model<Apiary>,
+    @InjectModel(User.name) private userModel: Model<User>,
+  ) {}
 
-  // ---------------------------------
-  // Apiaries specific apis
-  // ---------------------------------
-
+  //get all apiaries
   getApiaries() {
     return this.apiaryModel.find();
   }
 
+  async getOwnerApiaries(user: ReqUser) {
+    const result = await this.userModel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(user.userId), // Match the specific owner
+        },
+      },
+      {
+        $lookup: {
+          from: 'apiaries', // name of collection of Apiary model
+          localField: 'apiaries', // name of field in user
+          foreignField: '_id', // name of field in Apiary model
+          as: 'apiaries', // Alias for the joined data
+        },
+      },
+      {
+        $project: {
+          apiaries: 1, // Include only the apiary details
+        },
+      },
+    ]);
+
+    return result;
+  }
+
+  // add an apiary by owner
   createApiary(createApiaryDto: CreateApiaryDto) {
     const newApiary = new this.apiaryModel(createApiaryDto);
     return newApiary.save();
@@ -52,37 +80,11 @@ export class ApiariesService {
   // apiaries tasks specific api
   // ---------------------------------
 
-  async getTasks(apiaryId: string) {
-    const apiary = await this.getApiaryById(apiaryId);
-    return apiary.tasks;
-  }
-
-  async addTask(apiaryId: string, createTaskDto: CreateTaskDto) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const newTask = new Task(createTaskDto);
-    apiary.tasks.push(newTask);
-    await apiary.save();
-    return apiary;
-  }
-
-  async deleteTask(apiaryId: string, taskId: string) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const tasks = apiary.tasks.filter((t) => t._id.toString() != taskId);
-    apiary.tasks = tasks;
-    await apiary.save();
-    return apiary;
-  }
-
-  async completeTask(
-    apiaryId: string,
-    taskId: string,
-    updateTaskDto: UpdateTaskDto,
-  ) {
-    const apiary = await this.getApiaryById(apiaryId);
-    const task = apiary.tasks.find((t) => t._id.toString() === taskId);
-    task.status = TaskStatus.Done;
-    task.comment = updateTaskDto.comment ?? 'No comment';
-    await apiary.save();
-    return apiary;
-  }
+  // async addTask(apiaryId: string, createTaskDto: CreateTaskDto) {
+  //   const apiary = await this.getApiaryById(apiaryId);
+  //   const newTask = new Task(createTaskDto);
+  //   apiary.tasks.push(newTask);
+  //   await apiary.save();
+  //   return apiary;
+  // }
 }
