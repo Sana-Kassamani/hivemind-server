@@ -5,17 +5,10 @@ import { ApiariesService } from 'src/core/apiaries/apiaries.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Apiary, ApiarySchema } from 'src/core/apiaries/schema/apiary.schema';
 import { HivesController } from './hives.controller';
+import { registerApiaryModel } from 'src/modelRegistration/apiary.model';
 
 @Module({
-  imports: [
-    ApiariesModule,
-    MongooseModule.forFeature([
-      {
-        name: Apiary.name,
-        schema: ApiarySchema,
-      },
-    ]),
-  ],
+  imports: [registerApiaryModel()],
   controllers: [HivesController],
   providers: [HivesService],
   exports: [HivesService],
