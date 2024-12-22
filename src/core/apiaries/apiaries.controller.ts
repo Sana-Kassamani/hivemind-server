@@ -9,19 +9,31 @@ import {
   UsePipes,
   ValidationPipe,
   HttpException,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiariesService } from './apiaries.service';
 import { CreateApiaryDto } from './dto/create-apiary.dto';
 import { UpdateApiaryDto } from './dto/update-apiary.dto';
 import mongoose from 'mongoose';
+import { Role } from 'src/auth/decorators/role.decorator';
+import { UserType } from 'src/utils/enums/userType.enum';
+import { RoleGuard } from 'src/auth/guards/authorization.guard';
+import { ReqUser } from 'src/auth/guards/authentication.guard';
 
 @Controller('apiaries')
 export class ApiariesController {
   constructor(private apiariesService: ApiariesService) {}
 
+  @Role(UserType.Admin)
+  @UseGuards(RoleGuard)
   @Get()
   getApiaries() {
     return this.apiariesService.getApiaries();
+  }
+  @Get('owner')
+  getOwnerApiaries(@Request() req: ReqUser) {
+    return this.apiariesService.getOwnerApiaries(req);
   }
 
   @Get(':id')
@@ -33,6 +45,8 @@ export class ApiariesController {
   }
 
   @Post()
+  @Role(UserType.Owner)
+  @UseGuards(RoleGuard)
   @UsePipes(new ValidationPipe())
   createApiary(@Body() createApiaryDto: CreateApiaryDto) {
     console.log(createApiaryDto);
@@ -58,6 +72,8 @@ export class ApiariesController {
   }
 
   @Delete(':id')
+  @Role(UserType.Owner)
+  @UseGuards(RoleGuard)
   async deleteApiary(@Param('id') id: string) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
     if (!isValid) throw new HttpException('Invalid Id', 400);
