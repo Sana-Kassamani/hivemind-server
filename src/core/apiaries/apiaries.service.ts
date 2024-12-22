@@ -66,8 +66,22 @@ export class ApiariesService {
     });
   }
 
-  deleteApiary(id: string) {
+  async deleteApiary(user: ReqUser, id: string) {
     //if found return deleted doc, else return null
-    return this.apiaryModel.findByIdAndDelete(id);
+    const deleted = await this.apiaryModel.findByIdAndDelete(id);
+    if (!deleted) throw new NotFoundException('Apiary not foumd to delete');
+    const owner = await this.userModel.discriminators.Owner.findByIdAndUpdate(
+      {
+        _id: user.userId,
+      },
+      {
+        $pull: { apiaries: new mongoose.Types.ObjectId(deleted._id) },
+      },
+      {
+        new: true,
+      },
+    );
+    console.log(owner);
+    return deleted;
   }
 }
