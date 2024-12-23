@@ -7,6 +7,8 @@ import { TasksModule } from './core/tasks/tasks.module';
 import { HivesModule } from './core/hives/hives.module';
 import { HiveDetailsModule } from './core/hive-details/hive-details.module';
 import { AuthModule } from './auth/auth.module';
+import { UserSettingsModule } from './core/user-settings/user-settings.module';
+import { NotificationsModule } from './core/notifications/notifications.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -28,6 +30,8 @@ import configuration from './config/configuration';
     HivesModule,
     HiveDetailsModule,
     AuthModule,
+    UserSettingsModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [],
