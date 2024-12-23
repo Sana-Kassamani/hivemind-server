@@ -6,16 +6,22 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import mongoose from 'mongoose';
+import { Role } from 'src/auth/decorators/role.decorator';
+import { UserType } from 'src/utils/enums/userType.enum';
+import { AuthGuard } from 'src/auth/guards/authentication.guard';
 
 @Controller('users') //"users" here is the name of route to acces these apis
 export class UsersController {
   constructor(private usersService: UsersService) {}
+  @Role(UserType.Admin)
+  @UseGuards(AuthGuard)
   @Get()
   getUsers() {
     return this.usersService.getUsers();

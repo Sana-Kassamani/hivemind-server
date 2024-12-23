@@ -10,8 +10,29 @@ import { UserType } from 'src/utils/enums/userType.enum';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  getUsers() {
-    return this.userModel.find();
+  async getUsers() {
+    const users = await this.userModel.find({
+      userType: { $ne: UserType.Admin },
+    });
+    const grouped = users.reduce(
+      (groups: any, user) => {
+        switch (user.userType) {
+          case UserType.Owner:
+            groups.owners.push(user);
+            break;
+          case UserType.BeeKeeper:
+            groups.beekeepers.push(user);
+            break;
+          default:
+        }
+        return groups;
+      },
+      {
+        beekeepers: [],
+        owners: [],
+      },
+    );
+    return grouped;
   }
 
   async createUser(createUserDto: CreateUserDto) {
