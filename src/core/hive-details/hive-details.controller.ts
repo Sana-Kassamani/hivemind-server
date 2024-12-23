@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { HiveDetailsSchema } from './schema/hive-details.schema';
+import { HiveDetailsSchema } from './schema/hive-iotDetails.schema';
 import { HiveDetailsService } from './hive-details.service';
+import { CreateIOTDetailsDto } from './dto/create-iotDetails.dto';
 
 @Controller('hive-details')
 export class HiveDetailsController {
@@ -18,8 +19,12 @@ export class HiveDetailsController {
   addHiveDetails(
     @Param('apiaryId') apiaryId: string,
     @Param('hiveId') hiveId: string,
-    // @Body('details') details: any,
+    @Body() createIOTDetails: CreateIOTDetailsDto,
   ) {
-    return this.hiveDetailsService.addHiveDetails(apiaryId, hiveId);
+    return this.hiveDetailsService.addHiveDetails(
+      apiaryId,
+      hiveId,
+      createIOTDetails,
+    );
   }
 }
