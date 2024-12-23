@@ -52,4 +52,17 @@ export class HivesController {
   deleteHive(@Param('id') apiaryId: string, @Param('hiveId') hiveId: string) {
     return this.hivesService.deleteHive(apiaryId, hiveId);
   }
+
+  @Post(':apiaryId/:hiveId')
+  setHarvestStatus(
+    @Param('apiaryId') apiaryId: string,
+    @Param('hiveId') hiveId: string,
+    @Body() updateHiveDto: UpdateHiveDto,
+  ) {
+    return this.hivesService.updateHarvestStatusToNow(
+      apiaryId,
+      hiveId,
+      updateHiveDto.harvestStatus,
+    );
+  }
 }
