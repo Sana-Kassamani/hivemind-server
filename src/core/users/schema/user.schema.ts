@@ -3,6 +3,7 @@ import mongoose, { HydratedDocument, ObjectId, Types } from 'mongoose';
 import { UserType } from 'src/utils/enums/userType.enum';
 import * as bcrypt from 'bcrypt';
 import { UserSettings } from 'src/core/user-settings/schema/userSettings.schema';
+import { NotificationsSchema } from 'src/core/notifications/schema/notifications.schema';
 @Schema({ discriminatorKey: 'userType' })
 export class User {
   _id: Types.ObjectId;
@@ -25,6 +26,9 @@ export class User {
 
   @Prop({ type: UserSettings, default: () => ({}) })
   settings: UserSettings;
+
+  @Prop({ type: [NotificationsSchema], default: [] })
+  notifications: Notification[];
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
