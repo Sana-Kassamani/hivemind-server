@@ -37,35 +37,36 @@ export class ApiariesService {
   async createApiary(user: ReqUser, createApiaryDto: CreateApiaryDto) {
     try {
       const newApiary = new this.apiaryModel(createApiaryDto);
+      console.log(newApiary);
       await newApiary.save();
+      // add apiary to apiaries of owner
       const owner = await this.userModel.discriminators.Owner.findByIdAndUpdate(
         {
           _id: user.userId,
         },
         {
-          $push: { apiaries: new mongoose.Types.ObjectId(newApiary._id) },
+          $push: { apiaries: newApiary._id },
         },
         {
           new: true,
         },
       );
+      if (!owner) throw new NotFoundException('Owner not found');
+      //add apiary as assigned to beekeeper
       const beekeeper =
         await this.userModel.discriminators.Beekeeper.findByIdAndUpdate(
           {
             _id: createApiaryDto.beekeeperId,
           },
           {
-            assignedApiary: new mongoose.Types.ObjectId(
-              createApiaryDto.beekeeperId,
-            ),
+            assignedApiary: newApiary._id,
           },
           {
             new: true,
           },
         );
-      console.log(owner);
-      console.log(beekeeper);
-      if (!owner) throw new NotFoundException('Owner not found');
+
+      if (!beekeeper) throw new NotFoundException('Beekeeper not found');
       return newApiary;
     } catch (err) {
       if (err.code === 11000) {
@@ -96,18 +97,19 @@ export class ApiariesService {
   async deleteApiary(user: ReqUser, id: string) {
     //if found return deleted doc, else return null
     const deleted = await this.apiaryModel.findByIdAndDelete(id);
-    if (!deleted) throw new NotFoundException('Apiary not foumd to delete');
+    if (!deleted) throw new NotFoundException('Apiary not found to delete');
     const owner = await this.userModel.discriminators.Owner.findByIdAndUpdate(
       {
         _id: user.userId,
       },
       {
-        $pull: { apiaries: new mongoose.Types.ObjectId(deleted._id) },
+        $pull: { apiaries: deleted._id },
       },
       {
         new: true,
       },
     );
+
     const beekeeper =
       await this.userModel.discriminators.Beekeeper.findOneAndUpdate(
         {
@@ -115,15 +117,13 @@ export class ApiariesService {
         },
         {
           $set: {
-            '$.assignedApiary': null,
+            assignedApiary: null,
           },
         },
         {
           new: true,
         },
       );
-    console.log(owner);
-    console.log(beekeeper);
     return deleted;
   }
 }

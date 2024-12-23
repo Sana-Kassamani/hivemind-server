@@ -52,7 +52,6 @@ export class ApiariesController {
   @Post()
   @UsePipes(new ValidationPipe())
   createApiary(@Request() req, @Body() createApiaryDto: CreateApiaryDto) {
-    console.log(createApiaryDto);
     return this.apiariesService.createApiary(req.user, createApiaryDto);
   }
 
