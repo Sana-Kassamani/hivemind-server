@@ -94,6 +94,47 @@ export class HivesService {
     return updatedApiary;
   }
 
+  async updateHarvestStatusToNow(
+    apiaryId: string,
+    hiveId: string,
+    harvestStatus: boolean,
+  ) {
+    var apiary;
+    // if harvest status is changed to true, so hive ready to be harvested
+    if (harvestStatus) {
+      apiary = await this.apiaryModel.findOneAndUpdate(
+        { _id: apiaryId, 'hives._id': hiveId },
+        {
+          $set: {
+            'hives.$.harvestStatus': harvestStatus,
+          },
+        },
+        {
+          new: true,
+          projection: { hives: 1 },
+        },
+      );
+    } else {
+      // if harvest status is changed to false, so hive was harvested now so change harvest Date
+      apiary = await this.apiaryModel.findOneAndUpdate(
+        { _id: apiaryId, 'hives._id': hiveId },
+        {
+          $set: {
+            'hives.$.harvestStatus': harvestStatus,
+            'hives.$.lastHarvestDate': Date.now(),
+          },
+        },
+        {
+          new: true,
+          projection: { hives: 1 },
+        },
+      );
+    }
+
+    if (!apiary)
+      throw new NotFoundException('Apiary to update harvest is not found');
+    return apiary;
+  }
   // not used as endpoint
   async updateHive(
     apiaryId: string,
