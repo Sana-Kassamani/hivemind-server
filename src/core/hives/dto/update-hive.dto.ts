@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateHiveDto {
   @IsOptional()
@@ -8,4 +8,8 @@ export class UpdateHiveDto {
   @IsOptional()
   @IsNumber()
   nbOfFrames?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  harvestStatus?: boolean;
 }
