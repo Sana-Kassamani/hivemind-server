@@ -1,4 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotAcceptableException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/core/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -37,6 +44,8 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user: ModifiedUser = await this.validateUser(loginDto);
+    if (user.settings.banned)
+      throw new HttpException('User is banned', HttpStatus.FORBIDDEN);
     const token = await this.signToken(user);
     return { user, token };
   }
