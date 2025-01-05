@@ -22,14 +22,13 @@ export class ApiariesService {
   //get apiaries of an owner
   async getOwnerApiaries(user: ReqUser) {
     const result = await this.userModel.discriminators.Owner.findById(
-      {
-        _id: user.userId,
-      },
-      {
-        apiaries: 1,
-      },
-    ).populate('apiaries');
-
+      user.userId,
+    )
+      .populate({
+        path: 'apiaries',
+        select: '+hives.iotDetails',
+      })
+      .select('apiaries');
     return result;
   }
 
