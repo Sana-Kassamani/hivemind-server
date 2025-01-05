@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { isNotEmpty, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateApiaryDto {
   @IsNotEmpty()
@@ -8,6 +8,13 @@ export class CreateApiaryDto {
   @IsNotEmpty()
   @IsString()
   location: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  latitude: number;
+  @IsNotEmpty()
+  @IsNumber()
+  longitude: number;
 
   @IsNotEmpty()
   @IsString()
