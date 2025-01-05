@@ -37,7 +37,7 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto) {
     const { username, email } = createUserDto;
-    const user = await this.getUserByUsernameOEmail(username, email);
+    const user = await this.getUserByUsernameOrEmail(username, email);
     if (user) {
       throw new BadRequestException(
         `${user.username === username ? 'Username' : 'Email'} already exists`,
@@ -52,19 +52,25 @@ export class UsersService {
     return this.userModel.findById(id);
   }
 
-  async getUserByUsernameOEmail(username: string, email?: string) {
+  async getUserByUsernameOrEmail(username: string, email?: string) {
     const user = await this.userModel
       .findOne({
         $or: [{ username }, { email }],
+      })
+      .populate({
+        path: 'apiaries',
+        select: '+hives.iotDetails',
+      })
+      .populate({
+        path: 'assignedApiary',
+        select: '+hives.iotDetails',
       })
       .select('+password');
     return user;
   }
 
-  async getBeekeepersWithNoApiary() {
-    const beekeepers = await this.userModel.discriminators.Beekeeper.find({
-      assignedApiary: { $eq: null },
-    });
+  async getBeekeepers() {
+    const beekeepers = await this.userModel.discriminators.Beekeeper.find();
     return beekeepers;
   }
 }
