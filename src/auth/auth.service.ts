@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto) {
-    const user = await this.usersService.getUserByUsernameOEmail(
+    const user = await this.usersService.getUserByUsernameOrEmail(
       loginDto.username,
     );
     const check = await compare(loginDto.password, user?.password ?? '');
