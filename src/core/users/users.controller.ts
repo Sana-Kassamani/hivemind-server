@@ -27,6 +27,11 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @Get('beekeepers')
+  async getBeekeepers() {
+    console.log('here');
+    return await this.usersService.getBeekeepers();
+  }
   //users/:id
   //not used for now
   @Get(':id')
@@ -37,11 +42,6 @@ export class UsersController {
     if (!user) throw new HttpException('User not found', 404);
     console.log(user.userType);
     return user;
-  }
-
-  @Get('beekeepers/noApiary')
-  async getBeekeepersWithNoApiary() {
-    return this.usersService.getBeekeepersWithNoApiary();
   }
 
   @Post()
