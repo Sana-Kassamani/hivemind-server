@@ -24,6 +24,12 @@ export class User {
   })
   userType: string;
 
+  @Prop({
+    type: String,
+    required: true,
+  })
+  deviceId: string;
+
   @Prop({ type: UserSettings, default: () => ({}) })
   settings: UserSettings;
 
