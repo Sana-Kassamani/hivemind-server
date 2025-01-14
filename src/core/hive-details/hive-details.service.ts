@@ -37,4 +37,15 @@ export class HiveDetailsService {
       .select('+hives.iotDetails');
     return apiary;
   }
+
+  async getIotDetails(body: any) {
+    console.log('T: ', body.temperature);
+    console.log('h: ', body.humidity);
+    return 'hey';
+  }
+
+  async alertIot(body: any) {
+    console.log(body);
+    return 'alert';
+  }
 }

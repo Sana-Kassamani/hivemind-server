@@ -12,6 +12,7 @@ export class CreateApiaryDto {
   @IsNotEmpty()
   @IsNumber()
   latitude: number;
+
   @IsNotEmpty()
   @IsNumber()
   longitude: number;
