@@ -1,10 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotAcceptableException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { UsersService } from 'src/core/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/schema/user.schema';
+import { User } from 'src/core/users/schema/user.schema';
 import { compare } from 'bcrypt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from 'src/core/users/dto/create-user.dto';
+import { UserType } from 'src/utils/enums/userType.enum';
 
 type ModifiedUser = Omit<User, 'password'>;
 @Injectable()
@@ -15,7 +23,7 @@ export class AuthService {
   ) {}
 
   async validateUser(loginDto: LoginDto) {
-    const user = await this.usersService.getUserByUsernameOEmail(
+    const user = await this.usersService.getUserByUsernameOrEmail(
       loginDto.username,
     );
     const check = await compare(loginDto.password, user?.password ?? '');
@@ -37,10 +45,22 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user: ModifiedUser = await this.validateUser(loginDto);
+    if (user.settings.banned)
+      throw new HttpException('User is banned', HttpStatus.FORBIDDEN);
     const token = await this.signToken(user);
     return { user, token };
   }
 
+  async adminLogin(loginDto: LoginDto) {
+    const user: ModifiedUser = await this.validateUser(loginDto);
+    if (user.settings.banned)
+      throw new HttpException('User is banned', HttpStatus.FORBIDDEN);
+    if (user.userType != UserType.Admin) {
+      throw new UnauthorizedException();
+    }
+    const token = await this.signToken(user);
+    return { user, token };
+  }
   async signup(createUserDto: CreateUserDto) {
     const user = await this.usersService.createUser(createUserDto);
     const token = await this.signToken(user);
