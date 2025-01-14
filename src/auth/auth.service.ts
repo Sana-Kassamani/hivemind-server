@@ -24,6 +24,7 @@ export class AuthService {
 
   async validateUser(loginDto: LoginDto) {
     const user = await this.usersService.getUserByUsernameOrEmail(
+      loginDto.deviceId,
       loginDto.username,
     );
     const check = await compare(loginDto.password, user?.password ?? '');
@@ -61,6 +62,7 @@ export class AuthService {
     const token = await this.signToken(user);
     return { user, token };
   }
+
   async signup(createUserDto: CreateUserDto) {
     const user = await this.usersService.createUser(createUserDto);
     const token = await this.signToken(user);
