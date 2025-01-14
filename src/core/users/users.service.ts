@@ -11,9 +11,11 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async getUsers() {
-    const users = await this.userModel.find({
-      userType: { $ne: UserType.Admin },
-    });
+    const users = await this.userModel
+      .find({
+        userType: { $ne: UserType.Admin },
+      })
+      .select('-notifications ');
     const grouped = users.reduce(
       (groups: any, user) => {
         switch (user.userType) {
