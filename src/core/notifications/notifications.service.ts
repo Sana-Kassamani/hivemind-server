@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../users/schema/user.schema';
 import { Model } from 'mongoose';
@@ -7,8 +7,31 @@ import * as firebase from 'firebase-admin';
 
 @Injectable()
 export class NotificationsService {
-  constructor(@InjectModel(User.name) private apiaryModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
+  async addNotification(ids: string[], notification: CreateNotificationDto) {
+    const updatedUsers = this.userModel.updateMany(
+      { _id: { $in: ids } },
+      {
+        $push: {
+          notifications: {
+            title: notification.title,
+            message: notification.message,
+          },
+        },
+      },
+      {
+        new: true,
+        projection: { notifications: 1 },
+      },
+    );
+
+    if (!updatedUsers) {
+      throw new BadRequestException('Some users are not found');
+    }
+
+    return updatedUsers;
+  }
   async sendPush(pushNotification: CreateNotificationDto) {
     try {
       await firebase
@@ -16,10 +39,13 @@ export class NotificationsService {
         .send({
           notification: {
             title: pushNotification.title,
-            body: pushNotification.body,
+            body: pushNotification.message,
           },
-          token: pushNotification.deviceId,
-          data: {},
+          token:
+            'fdBZ4yV6QHSsNIJE6kGldR:APA91bFOIKR50EJIsOF5UWVVO0ibvNkN-AswQNuE6rYPKNWLfRB-U1huJ_37Gt9oKDyF3AXk_T3sgrSYbfeA_w_y_4cN6I5xE_N5N-D_11jfIAKADmtGr84',
+          data: {
+            time: Date.now().toString(),
+          },
           android: {
             priority: 'high',
             notification: {
