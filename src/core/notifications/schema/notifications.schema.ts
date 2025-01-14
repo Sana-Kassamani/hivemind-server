@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
 @Schema()
-export class Notifications {
+export class Notification {
   _id: Types.ObjectId;
 
   @Prop({ type: String, required: true })
@@ -11,11 +11,11 @@ export class Notifications {
   @Prop({ type: String, required: true })
   message: string;
 
-  @Prop({ type: Boolean, default: false })
-  read: boolean;
-
   @Prop({ type: Date, default: Date.now })
-  timestamp: Date;
+  time: Date;
+
+  @Prop({ type: Boolean, default: false })
+  deleted: boolean;
 }
 
-export const NotificationsSchema = SchemaFactory.createForClass(Notifications);
+export const NotificationsSchema = SchemaFactory.createForClass(Notification);
