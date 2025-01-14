@@ -54,7 +54,11 @@ export class UsersService {
     return this.userModel.findById(id);
   }
 
-  async getUserByUsernameOrEmail(username: string, email?: string) {
+  async getUserByUsernameOrEmail(
+    deviceId: string,
+    username: string,
+    email?: string,
+  ) {
     const user = await this.userModel
       .findOne({
         $or: [{ username }, { email }],
@@ -68,6 +72,19 @@ export class UsersService {
         select: '+hives.iotDetails',
       })
       .select('+password');
+
+    const updatedUserWithDeviceID = await this.userModel.findOneAndUpdate(
+      { _id: user._id },
+      {
+        $set: {
+          deviceId: deviceId,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+
     return user;
   }
 

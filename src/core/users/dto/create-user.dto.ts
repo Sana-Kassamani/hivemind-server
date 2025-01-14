@@ -23,4 +23,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   userType?: string;
+
+  @IsOptional()
+  @IsString()
+  deviceId?: string;
 }
