@@ -28,6 +28,13 @@ export class AuthController {
   }
 
   @Public()
+  @Post('admin')
+  @HttpCode(HttpStatus.OK)
+  async adminLogin(@Body() loginDto: LoginDto) {
+    return this.authService.adminLogin(loginDto);
+  }
+
+  @Public()
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   @UsePipes(new ValidationPipe())
