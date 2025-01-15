@@ -4,10 +4,16 @@ import mongoose, { Model } from 'mongoose';
 import { Apiary } from 'src/core/apiaries/schema/apiary.schema';
 import { HiveDetails } from './schema/hive-iotDetails.schema';
 import { CreateIOTDetailsDto } from './dto/create-iotDetails.dto';
+import { NotificationsService } from '../notifications/notifications.service';
+import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { create } from 'node:domain';
 
 @Injectable()
 export class HiveDetailsService {
-  constructor(@InjectModel(Apiary.name) private apiaryModel: Model<Apiary>) {}
+  constructor(
+    @InjectModel(Apiary.name) private apiaryModel: Model<Apiary>,
+    private notificationService: NotificationsService,
+  ) {}
 
   async getHiveDetails(apiaryId: string, hiveId: string) {
     const apiary = await this.apiaryModel.findOne(
@@ -38,14 +44,36 @@ export class HiveDetailsService {
     return apiary;
   }
 
-  async getIotDetails(body: any) {
-    console.log('T: ', body.temperature);
-    console.log('h: ', body.humidity);
-    return 'hey';
+  async addIotDetails(createIotDetailsDto: CreateIOTDetailsDto) {
+    const updatedApiaries = await this.apiaryModel.updateMany(
+      { hives: { $exists: true, $not: { $size: 0 } } }, // Ensures the apiary has a non-empty hives array
+      {
+        $push: {
+          'hives.$[].iotDetails': createIotDetailsDto,
+        },
+      },
+    );
+    return updatedApiaries;
   }
 
-  async alertIot(body: any) {
-    console.log(body);
-    return 'alert';
+  async getIotDetails(createIotDetailsDto: CreateIOTDetailsDto) {
+    console.log('T: ', createIotDetailsDto.temperature);
+    console.log('h: ', createIotDetailsDto.humidity);
+    console.log('m: ', createIotDetailsDto.mass);
+    const updatedApiaries = await this.addIotDetails(createIotDetailsDto);
+    return updatedApiaries;
+  }
+
+  async alertIot(createIotDetailsDto: CreateIOTDetailsDto) {
+    if (createIotDetailsDto.temperature && createIotDetailsDto.humidity) {
+      const dto = new CreateNotificationDto({
+        title: 'Hive Status Alert',
+        message: createIotDetailsDto.message,
+      });
+      this.notificationService.sendPush(dto);
+      const updatedApiaries = await this.addIotDetails(createIotDetailsDto);
+      return updatedApiaries;
+    }
+    console.log(createIotDetailsDto);
   }
 }
