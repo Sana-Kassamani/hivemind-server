@@ -45,6 +45,12 @@ export class HiveDetailsService {
   }
 
   async addIotDetails(createIotDetailsDto: CreateIOTDetailsDto) {
+    if (createIotDetailsDto.mass < 0) {
+      createIotDetailsDto.mass = 0;
+    } else {
+      createIotDetailsDto.mass = (createIotDetailsDto.mass % 1000) + 20;
+    }
+
     const updatedApiaries = await this.apiaryModel.updateMany(
       { hives: { $exists: true, $not: { $size: 0 } } }, // Ensures the apiary has a non-empty hives array
       {
