@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { create } from 'domain';
 import { UserType } from 'src/utils/enums/userType.enum';
+import { OwnerSchema } from './schema/owner.schema';
 
 @Injectable()
 export class UsersService {
@@ -84,6 +85,27 @@ export class UsersService {
         new: true,
       },
     );
+    // if (user && user.apiaries === UserType.Owner) {
+
+    //   user.apiaries.forEach((apiary) => {
+    //     apiary.hives = apiary.hives.filter((hive) => !hive.deleted);
+    //   });
+    // }
+    // else if (user && user.userType === UserType.BeeKeeper)
+    // {
+    //   user.assignedApiary?.hives &&
+    //     (user.assignedApiary.hives = user.assignedApiary.hives.filter(
+    //       (hive) => !hive.deleted,
+    //     ));
+
+    // }
+
+    if (user) {
+      // Filter notifications where deleted is true
+      user.notifications = user.notifications.filter(
+        (notification) => !notification.deleted,
+      );
+    }
 
     return user;
   }
