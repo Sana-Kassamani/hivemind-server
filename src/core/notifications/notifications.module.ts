@@ -8,5 +8,6 @@ import { firebaseAdminProvider } from './firebase-admin.provider';
   imports: [registerUserModel()],
   controllers: [NotificationsController],
   providers: [firebaseAdminProvider, NotificationsService],
+  exports: [NotificationsService],
 })
 export class NotificationsModule {}
