@@ -90,7 +90,10 @@ export class TasksService {
       {
         $set: {
           'tasks.$.status': TaskStatus.Done, // Update the status of the matched task
-          'tasks.$.comment': updateTaskDto.comment ?? 'No comment', // Update the comment of the matched task
+          'tasks.$.comment':
+            updateTaskDto.comment || updateTaskDto.comment == ''
+              ? 'No comment'
+              : updateTaskDto.comment,
         },
       },
       {
@@ -103,20 +106,21 @@ export class TasksService {
     return updatedApiary;
   }
 
-  async deleteTask(apiaryId: string, taskId: string) {
+  async deleteTask(apiaryId: string) {
     // find apiary with id and delete task with id
-    const updatedApiary = await this.apiaryModel.findOneAndUpdate(
-      { _id: apiaryId, 'tasks._id': taskId },
+    const updatedApiary = await this.apiaryModel.updateMany(
+      { _id: apiaryId }, // Match the apiary by ID
       {
-        $pull: {
-          tasks: {
-            _id: taskId,
-          },
+        $set: {
+          'tasks.$[task].deleted': true, // Set the 'deleted' field to true for matched tasks
         },
       },
       {
+        arrayFilters: [
+          { 'task.status': TaskStatus.Done }, // Filter tasks where status is 'Done'
+        ],
         new: true,
-        projection: { hives: 1 },
+        projection: { hives: 1 }, // Return only the hives field in the response
       },
     );
     // if apiary doc or task not found
