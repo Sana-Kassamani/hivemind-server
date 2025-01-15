@@ -11,8 +11,8 @@ export class Notification {
   @Prop({ type: String, required: true })
   message: string;
 
-  @Prop({ type: Date, default: Date.now })
-  time: Date;
+  @Prop({ type: Date || String, default: Date.now })
+  time: Date | string;
 
   @Prop({ type: Boolean, default: false })
   deleted: boolean;
