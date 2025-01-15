@@ -50,9 +50,9 @@ export class TasksController {
     return this.tasksService.completeTask(apiaryId, taskId, updateTaskDto);
   }
 
-  @Delete(':id/:taskId')
+  @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  deleteTask(@Param('id') apiaryId: string, @Param('taskId') taskId: string) {
-    return this.tasksService.deleteTask(apiaryId, taskId);
+  deleteTask(@Param('id') apiaryId: string) {
+    return this.tasksService.deleteTask(apiaryId);
   }
 }
