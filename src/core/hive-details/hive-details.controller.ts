@@ -31,8 +31,8 @@ export class HiveDetailsController {
 
   @Public()
   @Post('/iot')
-  getIotDetails(@Body() body: any) {
-    return this.hiveDetailsService.getIotDetails(body);
+  getIotDetails(@Body() createIotDetailDto: CreateIOTDetailsDto) {
+    return this.hiveDetailsService.getIotDetails(createIotDetailDto);
   }
 
   @Public()
