@@ -24,6 +24,9 @@ export class Task {
 
   @Prop({ type: Date, required: true, default: Date.now })
   date: Date;
+
+  @Prop({ type: Boolean, default: false })
+  deleted: boolean;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
