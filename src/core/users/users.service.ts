@@ -74,33 +74,33 @@ export class UsersService {
       })
       .select('+password');
 
-    const updatedUserWithDeviceID = await this.userModel.findOneAndUpdate(
-      { _id: user._id },
-      {
-        $set: {
-          deviceId: deviceId,
-        },
-      },
-      {
-        new: true,
-      },
-    );
-    // if (user && user.apiaries === UserType.Owner) {
-
-    //   user.apiaries.forEach((apiary) => {
-    //     apiary.hives = apiary.hives.filter((hive) => !hive.deleted);
-    //   });
-    // }
-    // else if (user && user.userType === UserType.BeeKeeper)
-    // {
-    //   user.assignedApiary?.hives &&
-    //     (user.assignedApiary.hives = user.assignedApiary.hives.filter(
-    //       (hive) => !hive.deleted,
-    //     ));
-
-    // }
-
     if (user) {
+      const updatedUserWithDeviceID = await this.userModel.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $set: {
+            deviceId: deviceId,
+          },
+        },
+        {
+          new: true,
+        },
+      );
+      // if (user && user.apiaries === UserType.Owner) {
+
+      //   user.apiaries.forEach((apiary) => {
+      //     apiary.hives = apiary.hives.filter((hive) => !hive.deleted);
+      //   });
+      // }
+      // else if (user && user.userType === UserType.BeeKeeper)
+      // {
+      //   user.assignedApiary?.hives &&
+      //     (user.assignedApiary.hives = user.assignedApiary.hives.filter(
+      //       (hive) => !hive.deleted,
+      //     ));
+
+      // }
+
       // Filter notifications where deleted is true
       user.notifications = user.notifications.filter(
         (notification) => !notification.deleted,
