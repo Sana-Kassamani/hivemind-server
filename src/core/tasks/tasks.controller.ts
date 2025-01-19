@@ -8,6 +8,8 @@ import {
   Param,
   Patch,
   Post,
+  Put,
+  Request,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -42,12 +44,23 @@ export class TasksController {
 
   @Patch(':id/:taskId')
   @HttpCode(HttpStatus.OK)
-  completeTask(
+  completeTask(@Param('id') apiaryId: string, @Param('taskId') taskId: string) {
+    return this.tasksService.completeTask(apiaryId, taskId);
+  }
+
+  @Put(':id/:taskId')
+  @HttpCode(HttpStatus.CREATED)
+  @UsePipes(new ValidationPipe())
+  addComment(
     @Param('id') apiaryId: string,
     @Param('taskId') taskId: string,
-    @Body() updateTaskDto: UpdateTaskDto,
+    @Body() body: any,
+    @Request() req,
   ) {
-    return this.tasksService.completeTask(apiaryId, taskId, updateTaskDto);
+    const updateTaskDto = new UpdateTaskDto();
+    updateTaskDto.content = body.comment;
+    updateTaskDto.userId = req.user.userId;
+    return this.tasksService.addComment(apiaryId, taskId, updateTaskDto);
   }
 
   @Delete(':id')
