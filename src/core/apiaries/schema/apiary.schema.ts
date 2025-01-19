@@ -12,7 +12,7 @@ import { Task, TaskSchema } from 'src/core/tasks/schema/task.schema';
 export class Apiary {
   _id: Types.ObjectId;
 
-  @Prop({ type: String, unique: true, required: true })
+  @Prop({ type: String, required: true })
   label: string;
 
   @Prop({ type: String, required: true })
