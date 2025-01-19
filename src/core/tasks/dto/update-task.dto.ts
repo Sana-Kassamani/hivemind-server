@@ -1,13 +1,11 @@
-import {
-  IsNotEmpty,
-  isNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateTaskDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  comment?: string;
+  content: string;
+
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
 }
