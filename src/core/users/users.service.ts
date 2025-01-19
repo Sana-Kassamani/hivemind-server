@@ -67,10 +67,20 @@ export class UsersService {
       .populate({
         path: 'apiaries',
         select: '+hives.iotDetails',
+        populate: {
+          path: 'tasks.comments.userId',
+          select: 'username',
+          model: 'User',
+        },
       })
       .populate({
         path: 'assignedApiary',
         select: '+hives.iotDetails',
+        populate: {
+          path: 'tasks.comments.userId',
+          select: 'username',
+          model: 'User',
+        },
       })
       .select('+password');
 
