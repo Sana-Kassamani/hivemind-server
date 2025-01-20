@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserSettingsModule } from './core/user-settings/user-settings.module';
 import { NotificationsModule } from './core/notifications/notifications.module';
 import configuration from './config/configuration';
+import { HiveMediaModule } from './core/hive-media/hive-media.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import configuration from './config/configuration';
     AuthModule,
     UserSettingsModule,
     NotificationsModule,
+    HiveMediaModule,
   ],
   controllers: [],
   providers: [],
