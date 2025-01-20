@@ -92,7 +92,7 @@ export class NotificationsService {
             body: pushNotification.message,
           },
           token:
-            'fdBZ4yV6QHSsNIJE6kGldR:APA91bFOIKR50EJIsOF5UWVVO0ibvNkN-AswQNuE6rYPKNWLfRB-U1huJ_37Gt9oKDyF3AXk_T3sgrSYbfeA_w_y_4cN6I5xE_N5N-D_11jfIAKADmtGr84',
+            'diBjlVWLRuaxYXWgPN1YOR:APA91bGHHJf8lfZIr8415Ie_hkcHShY4lzED2xzp0vtrx0Mxi94cdUAn3RLFwlvMRJmRTVyHFH66JHe5SzVEPH71UPPcAjG_XkVUMxdwo-UQQ7ddwRF8iTI',
           data: {
             time: time,
           },
