@@ -4,10 +4,6 @@ import {
   HiveDetails,
   HiveDetailsSchema,
 } from 'src/core/hive-details/schema/hive-iotDetails.schema';
-import {
-  HiveMedia,
-  HiveMediaSchema,
-} from 'src/core/hive-details/schema/hive-media.schema';
 
 @Schema()
 export class Hive {
@@ -30,12 +26,6 @@ export class Hive {
 
   @Prop({ type: [HiveDetailsSchema], default: [], select: false })
   iotDetails: HiveDetails[];
-
-  // @Prop({ type: [HiveMediaSchema], default: [], select: false })
-  // images: HiveMedia[];
-
-  // @Prop({ type: [HiveMediaSchema], default: [], select: false })
-  // audios: HiveMedia[];
 }
 
 export const HiveSchema = SchemaFactory.createForClass(Hive);
