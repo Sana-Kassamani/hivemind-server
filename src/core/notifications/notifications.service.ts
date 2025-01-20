@@ -20,16 +20,15 @@ export class NotificationsService {
           as: 'ownerApiaries',
         },
       },
-      // Lookup apiaries for beekeepers
       {
         $lookup: {
           from: 'apiaries',
-          localField: 'assignedApiary', // Beekeepers' assigned apiary ID
+          localField: 'assignedApiary',
           foreignField: '_id',
           as: 'beekeeperApiary',
         },
       },
-      // Combine owner and beekeeper apiaries
+
       {
         $addFields: {
           relatedApiaries: {
@@ -37,16 +36,16 @@ export class NotificationsService {
           },
         },
       },
-      // Filter users whose apiaries have hives
+
       {
         $match: {
           'relatedApiaries.hives': { $exists: true, $not: { $size: 0 } },
         },
       },
-      // Project only user IDs
+
       {
         $project: {
-          _id: 1, // Keep only user ID
+          _id: 1,
         },
       },
     ]);
@@ -91,8 +90,8 @@ export class NotificationsService {
             title: pushNotification.title,
             body: pushNotification.message,
           },
-          token:
-            'diBjlVWLRuaxYXWgPN1YOR:APA91bGHHJf8lfZIr8415Ie_hkcHShY4lzED2xzp0vtrx0Mxi94cdUAn3RLFwlvMRJmRTVyHFH66JHe5SzVEPH71UPPcAjG_XkVUMxdwo-UQQ7ddwRF8iTI',
+          // to be replaced by deviceId from db when user_id is specified in the iot system and sent by req
+          token: process.env.TOKEN_ID,
           data: {
             time: time,
           },
